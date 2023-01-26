@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,15 +14,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ExampleSubsystem extends SubsystemBase {
 
-  private CANSparkMax grabberSpark;
+  private CANSparkMax motorOne;
+  private CANSparkMax motorTwo;
   /** Creates a new ExampleSubsystem. */
   public ExampleSubsystem() {
-    grabberSpark = new CANSparkMax(15, MotorType.kBrushless);
+    this.motorOne = new CANSparkMax(15, MotorType.kBrushless);
+    this.motorTwo = new CANSparkMax(10, MotorType.kBrushless);
+    this.motorOne.restoreFactoryDefaults();
+    this.motorTwo.restoreFactoryDefaults();
+    this.motorOne.setIdleMode(IdleMode.kBrake);
+    this.motorTwo.setIdleMode(IdleMode.kBrake);
+    this.motorTwo.follow(this.motorOne);
+
   }
 
   public void Go(double speed) {
-    var speedMax = .5;
-    grabberSpark.set(speed * speedMax);
+    var speedMax = 1;
+    this.motorOne.set(speed * speedMax);
+    SmartDashboard.putNumber("Speed", speed*speedMax);    
   }
 
   /**
@@ -51,8 +61,8 @@ public class ExampleSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Grabber Volts", grabberSpark.getBusVoltage());
-    SmartDashboard.putNumber("Grabber Current", grabberSpark.getOutputCurrent());
+    // SmartDashboard.putNumber("Grabber Volts", grabberSpark.getBusVoltage());
+    // SmartDashboard.putNumber("Grabber Current", grabberSpark.getOutputCurrent());
   }
 
   @Override
