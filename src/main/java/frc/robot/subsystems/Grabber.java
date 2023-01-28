@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Grabber extends SubsystemBase {
     private CANSparkMax grabberMotor;
     private RelativeEncoder grabberEncoder;
+    public boolean grabbing = false;
 
     public Grabber() {
         grabberMotor = new CANSparkMax(15, MotorType.kBrushless);

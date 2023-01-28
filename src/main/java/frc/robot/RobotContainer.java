@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants;
 import frc.robot.commands.GrabCommand;
+import frc.robot.commands.GrabMasterCommand;
 import frc.robot.commands.ReleaseCommand;
 import frc.robot.subsystems.Grabber;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,29 +13,24 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     private final Grabber grabber;
 
-    private final CommandXboxController controller = new CommandXboxController(Constants.kDriverControllerPort);
+    private final CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_PORT);
 
     public RobotContainer() {
 
         grabber = new Grabber();
-        /*ReleaseCommand releaseCommand = new ReleaseCommand(grabber, controller);
-        grabber.setDefaultCommand(releaseCommand);*/
 
         configureBindings();
     }
 
     /*
-     * A: pick up cone
-     * B: pick up cube
-     * X: release
+     * A: pick up / release cone
+     * B: pick up / release cube
      */
     private void configureBindings() {
         Trigger coneButton = controller.a();
-        coneButton.onTrue(new GrabCommand(grabber, controller, false));
+        coneButton.onTrue(new GrabMasterCommand(grabber, false));
         Trigger cubeButton = controller.b();
-        cubeButton.onTrue(new GrabCommand(grabber, controller, true));
-        Trigger releaseButton = controller.x();
-        releaseButton.onTrue(new ReleaseCommand(grabber, controller));
+        cubeButton.onTrue(new GrabMasterCommand(grabber, true));
     }
 
     public Command getAutonomousCommand() {
