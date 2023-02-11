@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class ReleaseCommand extends CommandBase {
-    private final Grabber grabber;
+    private Grabber grabber;
 
     public ReleaseCommand(Grabber grabber) {
         this.grabber = grabber;

@@ -6,20 +6,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-public class GrabCommand extends CommandBase {
+public class GrabZeroCommand extends CommandBase {
     private Grabber grabber;
-    private double limit;
 
-    public GrabCommand(Grabber grabber, boolean isCube) {
+    public GrabZeroCommand(Grabber grabber) {
         this.grabber = grabber;
 
         addRequirements(grabber);
-
-        if(isCube) {
-            limit = Constants.CUBE_POSITION;
-        } else {
-            limit = Constants.CONE_POSITION;
-        }
     }
 
     @Override
@@ -28,11 +21,12 @@ public class GrabCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(limit > grabber.getPosition()) {
-            grabber.spinMotor(1, Constants.MAX_SPEED);
-        } else {
+        if(grabber.switchIsPressed()) {
             grabber.stop();
-            grabber.grabbing = true;
+            grabber.zeroAtPosition(Constants.ZERO_POSITION);
+            grabber.zeroed = true;
+        } else {
+            grabber.spinMotor(1, 0.1);
         }
     }
 

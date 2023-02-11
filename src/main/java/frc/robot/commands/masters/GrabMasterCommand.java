@@ -1,11 +1,13 @@
-package frc.robot.commands;
+package frc.robot.commands.masters;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.GrabCommand;
+import frc.robot.commands.ReleaseCommand;
 import frc.robot.subsystems.Grabber;
 
 public class GrabMasterCommand extends CommandBase {
-    private final Grabber grabber;
+    private Grabber grabber;
     boolean isCube;
     boolean startState;
     Command myCommand;
@@ -23,9 +25,9 @@ public class GrabMasterCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(startState) {
+        if(startState) { //release if it's grabbing
             myCommand = new ReleaseCommand(grabber);
-        } else {
+        } else { //grab if it's not grabbing
             if(isCube) {
                 myCommand = new GrabCommand(grabber, true);
             } else {
@@ -43,6 +45,10 @@ public class GrabMasterCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (startState != grabber.grabbing);
+        if(!grabber.zeroed) {
+            return true;
+        }
+
+        return (startState != grabber.grabbing); //end when the state switches
     }
 }
